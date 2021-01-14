@@ -248,8 +248,8 @@ export class AppLoginComponent implements OnInit, OnDestroy {
 
     getRoles() {
         this.subscription.add(this.authService.post('users/roles', {
-            institution_id: this.formInstitutionRole.controls['institution'].value['id'],
-            user_id: this.user.id
+            institution: this.formInstitutionRole.controls['institution'].value['id'],
+            user: this.user.id
         }).subscribe(response => {
             this.roles = response['data'];
             this.msgs = [];
@@ -266,8 +266,8 @@ export class AppLoginComponent implements OnInit, OnDestroy {
     getPermissions() {
         this._spinner.show();
         this.subscription.add(this.authService.post('users/permissions', {
-            role_id: this.formInstitutionRole.controls['role'].value['id'],
-            institution_id: this.formInstitutionRole.controls['institution'].value['id']
+            role: this.formInstitutionRole.controls['role'].value['id'],
+            institution: this.formInstitutionRole.controls['institution'].value['id']
         }).subscribe(response => {
             this._spinner.hide();
             const permissions = response['data'];

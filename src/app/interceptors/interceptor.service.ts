@@ -23,22 +23,22 @@ export class InterceptorService implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let headers = new HttpHeaders();
         let params = req.params;
-        if (localStorage.getItem('token') && req.url.indexOf('reports') === -1) {
+        if (localStorage.getItem('token')) {
             headers = headers.append('Accept', 'application/json')
                 .append('Authorization', 'Bearer ' + (JSON.parse(localStorage.getItem('token')) as Token).access_token);
             if (!req.params.has('page')) {
                 params = params.append('page', '1');
             }
             if (localStorage.getItem('institution')) {
-                params = params.append('institution_id',
+                params = params.append('institution',
                     (JSON.parse(localStorage.getItem('institution')) as Institution).id.toString());
             }
             if (localStorage.getItem('user')) {
-                params = params.append('user_id',
+                params = params.append('user',
                     (JSON.parse(localStorage.getItem('user')) as User).id.toString());
             }
             if (localStorage.getItem('role')) {
-                params = params.append('role_id',
+                params = params.append('role',
                     (JSON.parse(localStorage.getItem('role')) as Role).id.toString());
             }
         } else {
@@ -51,9 +51,6 @@ export class InterceptorService implements HttpInterceptor {
             }));
         }
         if (req.url.indexOf('reports') >= 0) {
-            headers = new HttpHeaders()
-                .append('Authorization', 'Bearer ' + (JSON.parse(localStorage.getItem('token')) as Token).access_token)
-                .append('user_id', (JSON.parse(localStorage.getItem('user')) as User).id.toString());
             return next.handle(req.clone({headers, params, responseType: 'blob'})).pipe(catchError(error => {
                 return throwError(error);
             }));

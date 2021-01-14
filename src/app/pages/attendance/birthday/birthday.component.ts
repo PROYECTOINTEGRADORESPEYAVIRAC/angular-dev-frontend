@@ -45,7 +45,7 @@ export class BirthdayComponent implements OnInit {
 
     getUsers() {
         this._spinner.show();
-        this._attendanceService.get('birthdate').subscribe(response => {
+        this._attendanceService.get('birthdates').subscribe(response => {
             this._spinner.hide();
             this.users = response['data'];
             this.users = this.users.filter(element => element.birthdate.toString().substr(5, 2) === this.currentMonth);
