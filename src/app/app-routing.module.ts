@@ -26,7 +26,7 @@ import {AppUnderMaintenanceComponent} from './pages/auth/app.under-maintenance.c
                     {
                         path: 'crud',
                         component: AppCrudComponent,
-                        canActivate: [AuthGuard]
+                        //canActivate: [AuthGuard]
                     },
                     {
                         path: 'profile',
@@ -36,7 +36,7 @@ import {AppUnderMaintenanceComponent} from './pages/auth/app.under-maintenance.c
                     {
                         path: 'attendance',
                         loadChildren: () => import('./pages/attendance/attendance.module').then(m => m.AttendanceModule),
-                        canActivate: [AuthGuard]
+                        //canActivate: [AuthGuard]
                     },
                     {
                         path: 'auth/under-maintenance',
@@ -49,6 +49,12 @@ import {AppUnderMaintenanceComponent} from './pages/auth/app.under-maintenance.c
                 component: AppBlankComponent,
                 loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthModule)
             },
+            {
+                path: "cecy",
+                loadChildren: () =>
+                  import("./pages/cecy/cecy.module").then((m) => m.CedyModule),
+                //  canActivate: [AuthGuard],
+              },
             {path: '**', redirectTo: '/auth/not-found'},
         ], {scrollPositionRestoration: 'enabled'})
     ],

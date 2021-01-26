@@ -109,7 +109,7 @@ import {AppUnderMaintenanceComponent} from './pages/auth/app.under-maintenance.c
         AppBreadcrumbComponent,
         AppUnderMaintenanceComponent,
         AppCrudComponent,
-        TableDemoComponent
+        TableDemoComponent,
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true},

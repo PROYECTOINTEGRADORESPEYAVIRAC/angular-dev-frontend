@@ -1,0 +1,157 @@
+<p-toast ></p-toast>
+
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card">
+            <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+					<button pButton pRipple icon="pi pi-plus" label=""
+							class="p-button-info p-button-raised p-button-lg p-button-rounded p-mr-2"
+							(click)="openModal(null)" [pTooltip]="'Nuevo registro'"></button>
+                </ng-template>
+
+              
+            </p-toolbar>
+            <p-table
+            [responsive]="true" 
+            [value]="institucions"
+            [columns]="cols"
+            [(selection)]="selectedInstitucion" 
+            [rowHover]="true"
+              dataKey="id"
+            >
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">Administración de Instituciones</h5>
+                    <span class="p-input-icon-right">
+                        <p-dropdown #selectedCol [options]="cols" optionLabel="header"
+                                    class="p-text-uppercase p-m-2"
+                                    (onChange)="selectColSearch(selectedCol.value)"></p-dropdown>
+                        <i class="pi pi-search" (click)="search($event,inputSearch.value)"></i>
+                    <input #inputSearch pInputText type="text" placeholder="Buscar..."
+                           class="p-text-uppercase p-m-2"
+                           (keyup.enter)="search($event,inputSearch.value)"
+                           (keyup.backspace)="search($event,inputSearch.value)"/>
+                </span>
+                </div>
+            </ng-template>
+                <ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem">
+							<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="ruc">Ruc
+							<p-sortIcon field="RUC"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="authorities">Autotidad
+							<p-sortIcon field="RUC"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="code">Código
+							<p-sortIcon field="code"></p-sortIcon>
+						</th>
+						<th pSortableColumn="name">Nombre
+							<p-sortIcon field="name"></p-sortIcon>
+                        </th>
+                       
+						<th pSortableColumn="slogan">Slogan
+							<p-sortIcon field="slogan"></p-sortIcon>
+						</th>
+                       
+						<th>
+						</th>
+					</tr>
+				</ng-template>
+                <ng-template pTemplate="body" let-rowData  let-columns=columns>
+                    <tr>
+                        <td>
+							<p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                        </td>
+                        <td>{{rowData.ruc}}</td> 
+                        <td>{{rowData.authorities.user}}</td>
+                        <td>{{rowData.code}}</td>
+                        <td>{{rowData.name}}</td>
+                        <td>{{rowData.slogan}}</td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-images"
+                                    class="p-button-rounded p-button-raised p-mr-2" 
+                                    [pTooltip]="'Subir Icono'"></button>
+                            <button pButton pRipple icon="pi pi-user-edit"
+									class="p-button-rounded p-button-raised p-mr-2"
+									(click)="openModal(rowData)" [pTooltip]="'Editar registro'"></button>
+							<button pButton pRipple icon="pi pi-times"
+									class="p-button-rounded p-button-danger p-button-raised"
+									(click)="delete(rowData)" [pTooltip]="'Eliminar registro'"></button>
+						 </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						<span *ngIf="paginator.total===0"> No hay registros.</span>
+						<span *ngIf="paginator.total>0"> {{paginator.total}} registros.</span>
+						<p-paginator *ngIf="paginator.total>0"
+									 [rowsPerPageOptions]="rowsPerPageOptions"
+									 [rows]="paginator.per_page"
+									 [totalRecords]="paginator.total"
+									 (onPageChange)="paginate($event)"
+						></p-paginator>
+					</div>
+				</ng-template>
+
+            </p-table>
+        </div>
+        <form [formGroup]="form" (ngSubmit)="onSubmit($event)">
+            <p-dialog [(visible)]="dialog"  header="Details" [modal]="true"
+                styleClass="p-fluid" [maximizable]="true">
+                <ng-template pTemplate="content">
+                    <div class="p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="ruc">RUC:</label>
+                            <input id="ruc" type="text" pInputText formControlName="ruc">
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="code">Código:
+                            </label>
+                            <input id="code" type="text" pInputText formControlName="code">
+                        </div>
+                    </div>
+
+                    <div class="p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="slogan">Slogan</label>
+                            <input id="slogan" type="text" pInputText formControlName="slogan">
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="name">Nombre:</label>
+                            <input id="name" type="text" pInputText formControlName="name">
+                        </div>
+                    </div>
+                    <div class="p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="authorities">Día:
+                            </label>
+                            <p-dropdown id="authorities" [options]="authorities"   placeholder="Seleciona un Autoridad"  formControlName="authorities"  optionLabel="start_date" >
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </ng-template>
+
+
+                <ng-template pTemplate="footer">
+                    <button type="button" pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                        (click)="dialog=false"></button>
+                    <button type="submit" pButton pRipple label="Guardar" icon="pi pi-save"
+                        class="p-button-raised"></button>
+                </ng-template>
+
+            </p-dialog>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+

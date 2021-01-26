@@ -10,12 +10,12 @@ export const AttendanceRoutes: Routes = [
             {
                 path: '',
                 component: AttendanceComponent,
-                canActivate: [AuthGuard]
+               // canActivate: [AuthGuard]
             },
             {
                 path: 'administration',
                 component: AdministrationComponent,
-                canActivate: [AuthGuard]
+                //canActivate: [AuthGuard]
             },
         ]
     }

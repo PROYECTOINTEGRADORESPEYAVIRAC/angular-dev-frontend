@@ -1,0 +1,203 @@
+<p-toast ></p-toast>
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card">
+            <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+					<button pButton pRipple icon="pi pi-plus" label=""
+							class="p-button-info p-button-raised p-button-lg p-button-rounded p-mr-2"
+							(click)="openModal(null)" [pTooltip]="'Nuevo registro'"></button>
+                </ng-template>
+            </p-toolbar>
+            <p-table
+            [responsive]="true" 
+            [value]="schoolPeriods"
+            [columns]="cols"
+            [(selection)]="selectedschoolPeriod" 
+            [rowHover]="true"
+              dataKey="id"
+              [paginator]="true" [rows]="10"
+            >
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">Administración de Periodo Academico</h5>
+                    <span class="p-input-icon-right">
+                        <p-dropdown #selectedCol [options]="cols" optionLabel="header"
+                                    class="p-text-uppercase p-m-2"
+                                    (onChange)="selectColSearch(selectedCol.value)"></p-dropdown>
+                        <i class="pi pi-search" (click)="search($event,inputSearch.value)"></i>
+                    <input #inputSearch pInputText type="text" placeholder="Buscar..."
+                           class="p-text-uppercase p-m-2"
+                           (keyup.enter)="search($event,inputSearch.value)"
+                           (keyup.backspace)="search($event,inputSearch.value)"/>
+                </span>
+                </div>
+            </ng-template>
+                <ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem">
+							<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+						</th>
+						<th pSortableColumn="code">Código
+							<p-sortIcon field="code"></p-sortIcon>
+						</th>
+						<th pSortableColumn="name">Nombre
+							<p-sortIcon field="name"></p-sortIcon>
+						</th>
+						<th pSortableColumn="start_date">Fecha de Incio
+							<p-sortIcon field="start_date"></p-sortIcon>
+						</th>
+						<th pSortableColumn="end_date">Fecha de Fin
+							<p-sortIcon field="end_date"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="ordinary_start_date">Fecha de Incio Ordinaria
+							<p-sortIcon field="start_date"></p-sortIcon>
+						</th>
+						<th pSortableColumn="ordinary_end_date">Fecha de Fin Ordinaria
+							<p-sortIcon field="ordinary_end_date"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="extraordinary_start_date">Fecha de Incio Extraordinaria
+							<p-sortIcon field="extraordinary_start_date"></p-sortIcon>
+						</th>
+						<th pSortableColumn="extraordinary_end_date">Fecha de Fin Extraordinaria
+							<p-sortIcon field="extraordinary_end_date"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="especial_start_date">Fecha de Incio Especial
+							<p-sortIcon field="especial_start_date"></p-sortIcon>
+						</th>
+						<th pSortableColumn="especial_end_date">Fecha de Fin Especial
+							<p-sortIcon field="especial_end_date"></p-sortIcon>
+                        </th>
+						<th>
+						</th>
+					</tr>
+				</ng-template>
+                <ng-template pTemplate="body" let-rowData  let-columns = columns>
+                    <tr *ngIf="rowData.state_id == 1" >
+                        <td>
+							<p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+						</td>
+                        <td>{{rowData.name}}</td>
+                        <td>{{rowData.code}}</td>
+                        <td>{{rowData.start_date}}</td>
+                        <td>{{rowData.end_date}}</td>
+                        <td>{{rowData.ordinary_start_date}}</td>
+                        <td>{{rowData.ordinary_end_date}}</td>
+                        <td>{{rowData.extraordinary_start_date}}</td>
+                        <td>{{rowData.extraordinary_end_date}}</td>
+                        <td>{{rowData.especial_start_date}}</td>
+                        <td>{{rowData.especial_end_date}}</td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-user-edit"
+									class="p-button-rounded p-button-raised p-mr-2"
+									(click)="openModal(rowData)" [pTooltip]="'Editar registro'"></button>
+							<button pButton pRipple icon="pi pi-times"
+									class="p-button-rounded p-button-danger p-button-raised"
+									(click)="delete(rowData)" [pTooltip]="'Eliminar registro'"></button>
+						 </td>
+                    </tr>
+                </ng-template>
+              
+
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit($event)">
+    <p-dialog [(visible)]="dialog" [style]="{width: '650px'}" header="Details" [modal]="true"
+        styleClass="p-fluid" [maximizable]="true">
+        <ng-template pTemplate="content">
+            
+
+            <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="code">Còdigo:
+                        
+                    </label>
+                    <input id="code" type="text"  class="form-control" pInputText formControlName="code">
+                </div>
+                <div class="p-field p-col">
+                    <label for="name">Nombre:</label>
+                    <input id="name" type="text" pInputText formControlName="name">
+                </div>
+            </div>
+
+              <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="code">Fecha de Incio:
+                    </label>
+                    <p-calendar id="start_date" [showIcon]="true" inputId="start_date"  dateFormat="yy-mm-dd" formControlName="start_date"></p-calendar>   
+                </div>
+                <div class="p-field p-col">
+                    <label for="name">Fecha de Finalización:</label>
+                    <p-calendar id="end_date" [showIcon]="true" inputId="end_date" 
+                    dateFormat="yy-mm-dd" formControlName="end_date"
+                     ></p-calendar>
+                </div>
+            </div>
+            <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="code">Fecha de Incio Ordinaria:
+                    </label>
+                    <p-calendar id="ordinary_start_date" [showIcon]="true" inputId="ordinary_start_date"  dateFormat="yy-mm-dd" formControlName="ordinary_start_date"></p-calendar>
+                </div>
+                <div class="p-field p-col">
+                    <label for="name">Fecha de Fin Ordinaria:</label>
+                    <p-calendar  id="ordinary_end_date"  name="basic" [showIcon]="true" inputId="ordinary_end_date"  dateFormat="yy-mm-dd" formControlName="ordinary_end_date"></p-calendar>
+                </div>
+            </div>
+
+            <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="code">Fecha de Incio Extraordinaria:
+                    </label>
+                    <p-calendar id="extraordinary_start_date" [showIcon]="true" inputId="extraordinary_start_date" dateFormat="yy-mm-dd" formControlName="extraordinary_start_date"></p-calendar>
+                </div>
+                <div class="p-field p-col">
+                    <label for="name">Fecha de Fin Extraordinaria:</label>
+                    <p-calendar id="extraordinary_end_date" [showIcon]="true" inputId="extraordinary_end_date" dateFormat="yy-mm-dd"  formControlName="extraordinary_end_date"></p-calendar>
+                </div>
+            </div>
+            <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="code">Fecha de Incio Especial:
+                    </label>
+                    <p-calendar id="especial_start_date" [showIcon]="true" inputId="especial_start_date" dateFormat="yy-mm-dd" formControlName="especial_start_date"></p-calendar>
+                </div>
+                <div class="p-field p-col">
+                    <label for="name">Fecha de Fin Especial:</label>
+                        <p-calendar id="especial_end_date" [showIcon]="true" inputId="especial_end_date" dateFormat="yy-mm-dd" formControlName="especial_end_date"></p-calendar>
+                </div>
+            </div> 
+            
+            <div class="p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label for="code">Fecha de Incio Especial:
+                    </label>
+                    <p-dropdown id="status" [options]="status"   placeholder="Seleciona un Estado"  formControlName="status" >
+                    </p-dropdown>
+                </div>
+            </div>      
+           
+            
+        </ng-template>
+
+
+        <ng-template pTemplate="footer">
+            <button type="button" pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                (click)="dialog=false"></button>
+            <button type="submit" pButton pRipple label="Guardar" icon="pi pi-save"
+                class="p-button-raised"></button>
+        </ng-template>
+
+    </p-dialog>
+</form>
+
+
+
+
+
+
+
+
