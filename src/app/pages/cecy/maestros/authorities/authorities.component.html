@@ -1,0 +1,175 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="card">
+            <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+					<button pButton pRipple icon="pi pi-plus" label=""
+							class="p-button-info p-button-raised p-button-lg p-button-rounded p-mr-2"
+							(click)="openModal(null)" [pTooltip]="'Nuevo registro'"></button>
+					<button pButton pRipple icon="pi pi-trash" label=""
+							class="p-button-lg p-button-danger p-button-raised p-button-rounded"
+							(click)="deleteSelected()"
+							[pTooltip]="'Eliminar uno o varios registros'"></button>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+					<p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Importar"
+								  chooseLabel="Import" class="p-mr-2 p-d-inline-block"></p-fileUpload>
+					<button pButton pRipple label="Exportar" icon="pi pi-upload" class="p-button-secondary"
+							(click)="dt.exportCSV()"></button>
+				</ng-template>
+            </p-toolbar>
+            <p-table
+            [responsive]="true" 
+            [value]="authorities"
+            [columns]="cols"
+            [(selection)]="selectedAuthority" 
+            [rowHover]="true"
+              dataKey="id"
+            >
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">Administración de Autoridades</h5>
+                    <span class="p-input-icon-right">
+                        <p-dropdown #selectedCol [options]="cols" optionLabel="header"
+                                    class="p-text-uppercase p-m-2"
+                                    (onChange)="selectColSearch(selectedCol.value)"></p-dropdown>
+                        <i class="pi pi-search" (click)="search($event,inputSearch.value)"></i>
+                    <input #inputSearch pInputText type="text" placeholder="Buscar..."
+                           class="p-text-uppercase p-m-2"
+                           (keyup.enter)="search($event,inputSearch.value)"
+                           (keyup.backspace)="search($event,inputSearch.value)"/>
+                </span>
+                </div>
+            </ng-template>
+                <ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem">
+							<p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="CI">Número de Documento
+							<p-sortIcon field="user"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="user">Nombres
+							<p-sortIcon field="user"></p-sortIcon>
+                        </th>
+						<th pSortableColumn="user">Apellidos
+							<p-sortIcon field="user"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="position">Cargo
+							<p-sortIcon field="position"></p-sortIcon>
+						</th>
+						<th pSortableColumn="start_position">Inicio de Gestión
+							<p-sortIcon field="start_position"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="end_position">Fin de Gestión
+							<p-sortIcon field="end_position"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="status">Estado
+							<p-sortIcon field="status"></p-sortIcon>
+						</th>
+						<th>
+						</th>
+					</tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns=columns let-rowPowsition>
+                    <tr>
+                        <td>
+							<p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+						</td>
+                        <td>{{rowData.user.identification}}</td>
+                        <td>{{rowData.user.first_name}} {{rowData.user.second_name}}</td>
+                        <td>{{rowData.user.first_lastname}} {{rowData.user.second_lastname}}</td>
+                        <td>{{rowData.position.name}}</td>
+                        <td>{{rowData.start_position}}</td>
+                        <td>{{rowData.end_position}}</td> 
+                        <td>{{rowData.status.name}}</td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-user-edit"
+									class="p-button-rounded p-button-raised p-mr-2"
+									(click)="openModal(rowData)" [pTooltip]="'Editar registro'"></button>
+							<button pButton pRipple icon="pi pi-times"
+									class="p-button-rounded p-button-danger p-button-raised"
+									(click)="delete(user)" [pTooltip]="'Eliminar registro'"></button>
+						 </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+					<div class="p-d-flex p-ai-center p-jc-between">
+						<span *ngIf="paginator.total===0"> No hay registros.</span>
+						<span *ngIf="paginator.total>0"> {{paginator.total}} registros.</span>
+						<p-paginator *ngIf="paginator.total>0"
+									 [rowsPerPageOptions]="rowsPerPageOptions"
+									 [rows]="paginator.per_page"
+									 [totalRecords]="paginator.total"
+									 (onPageChange)="paginate($event)"
+						></p-paginator>
+					</div>
+				</ng-template>
+
+            </p-table>
+		</div>
+		<form [formGroup]="form" (ngSubmit)="onSubmit($event)">
+            <p-dialog [(visible)]="dialog" [style]="{width: '550px'}" header="Details" [modal]="true" [maximizable]="true"
+                styleClass="p-fluid">
+                <ng-template pTemplate="content">
+                    <div class="p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="state">Estatus:
+                            </label>
+                            <p-dropdown id="state" [options]="state"  [style]="{'width':'235px'}"  >
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="position">Posicion:</label>
+                            <p-dropdown id="position" [options]="position"  [style]="{'width':'235px'}"  >
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="state">Estatus:</label>
+                            <p-dropdown id="state" [options]="states"  [style]="{'width':'235px'}"  >
+                            </p-dropdown>
+                        </div>
+                    </div>
+
+					<div class="p-formgrid p-grid">
+						<div class="p-field p-col">
+							<label for="code">Fecha de Inicio de Posición:
+							</label>
+							<p-calendar  [showIcon]="true" inputId="icon"></p-calendar>
+						</div>
+						<div class="p-field p-col">
+							<label for="name">Fecha de Fin de  Posición:</label>
+								<p-calendar  [showIcon]="true" inputId="icon"></p-calendar>
+						</div>
+					</div>
+					<div class="p-field">
+						<label for="user">Usuario</label>
+						<input id="code" type="text" pInputText>
+
+
+					</div>
+                    
+                    
+                   
+                </ng-template>
+
+
+                <ng-template pTemplate="footer">
+                    <button type="button" pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                        (click)="dialog=false"></button>
+                    <button type="submit" pButton pRipple label="Guardar" icon="pi pi-save"
+                        class="p-button-raised"></button>
+                </ng-template>
+
+            </p-dialog>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+

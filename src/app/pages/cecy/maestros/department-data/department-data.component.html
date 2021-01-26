@@ -1,0 +1,68 @@
+<p>department-data works!</p>
+
+<p-button (click)="showDialog()" icon="pi pi-external-link" label="Show"></p-button>
+    <p-dialog header="Departments" [(visible)]="displayFormDepartment" [modal]="true" [style]="{width: '50vw'}"
+        [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+        <span class="p-float-label">
+            <input id="float-input" type="text" pInputText [(ngModel)]="datadepartamentSelect.name" placeholder="Name">
+        </span><br><br>
+        <span class="p-float-label">
+            <input id="float-input" type="text" pInputText [(ngModel)]="datadepartamentSelect.address" placeholder="Address">
+        </span><br><br>
+        <p-dropdown id="float-input-charge" [options]="types" [(ngModel)]="datadepartamentSelect.charge"  [style]="{'width':'235px'}"></p-dropdown><br><br>
+        <p-dropdown id="float-input-schedule" [options]="types" [(ngModel)]="datadepartamentSelect.schedule" [style]="{'width':'235px'}"></p-dropdown><br><br>
+        <p-dropdown id="float-input-canton" [options]="types" [(ngModel)]="datadepartamentSelect.canton" [style]="{'width':'235px'}"></p-dropdown> <br><br>
+        <button type="submit" pButton icon="pi pi-save" class="ui-button-primary" (click)="postDepartment()"
+                                label="SAVE"></button>
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-check" (click)="displayModal=false" label="Ok" styleClass="p-button-text"></p-button>
+        </ng-template>
+    </p-dialog>
+
+
+
+<div class="p-col-12 p-lg-12">
+    <div class="card orders-table">
+        <h1>Departments
+        </h1>
+        <p-table [value]="departments.data.attributes">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Charge</th>
+                    <th>State</th>
+                    <th>Schedule</th>
+                    <th>Canton</th>
+                    <th style="width: 8em; text-align: center;">
+                        <button pButton type="button" icon="pi pi-plus" class="ui-button-success"
+                            (click)="showDialog()"></button>
+                        <!-- [pTooltip]="'NEW RECORD'|translate" (click)="selectCatalogue(null);flagEditCatalogue = false;"-->
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData  let-columns = columns>
+                <tr>
+                    <td>{{rowData.id}}</td>
+                    <td>{{rowData.name}}</td>
+                    <td>{{rowData.address}}</td>
+                    <td>{{rowData.charge}}</td>
+                    <td>{{rowData.state}}</td>
+                    <td>{{rowData.schedule}}</td>
+                    <td>{{rowData.canton}}</td>
+                    <td><button pButton type="button" class="ui-button-primary" icon="pi pi-user-edit"
+                        style="margin-right: .5em"></button>
+                    <!--[pTooltip]="'MODIFY RECORD'|translate"
+                        (click)="selectCatalogue(rowData);flagEditCatalogue = true;"-->
+                    <button pButton type="button" class="ui-button-danger" icon="pi pi-trash"></button>
+                    <!--[pTooltip]="'DELETE RECORD'|translate"
+                        (click)="deleteCatalogue(rowData)"-->
+
+                </td>   
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
+</div>

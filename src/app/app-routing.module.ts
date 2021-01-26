@@ -40,7 +40,7 @@ import {AppCrudComponent} from './pages/crud/app.crud.component';
                     {
                         path: 'attendance',
                         loadChildren: () => import('./pages/attendance/attendance.module').then(m => m.AttendanceModule),
-                        canActivate: [AuthGuard]
+                        //canActivate: [AuthGuard]
                     },
                     {
                         path: 'teacher_eval',
@@ -54,6 +54,12 @@ import {AppCrudComponent} from './pages/crud/app.crud.component';
                 component: AppBlankComponent,
                 loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthModule)
             },
+            {
+                path: "cecy",
+                loadChildren: () =>
+                  import("./pages/cecy/cecy.module").then((m) => m.CedyModule),
+                //  canActivate: [AuthGuard],
+              },
             {path: '**', redirectTo: '/auth/not-found'},
         ], {scrollPositionRestoration: 'enabled'})
     ],
